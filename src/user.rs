@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use std::fmt;
 use std::collections::HashSet;
-use uuid::{Uuid};
+use uuid::Uuid;
 
 #[derive(Debug)]
 pub struct User<'a> {
@@ -33,5 +33,20 @@ impl fmt::Display for User<'_> {
 
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{:?}", self)
+    }
+}
+
+impl Default for User<'static> {
+
+    fn default() -> User<'static> {
+        User {
+            active: HashSet::new(),
+            broken: HashSet::new(),
+            created: Utc::now(),
+            fulfilled: HashSet::new(),
+            id: "",
+            name: "",
+            relationships: HashSet::new(),
+        }
     }
 }

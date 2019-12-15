@@ -3,7 +3,9 @@ use user::{User};
 
 fn main() {
 
-   let u = User::new("223232", "hello");
+   let u = User::default();
+
+   
 
    println!("{}", u);
 }
