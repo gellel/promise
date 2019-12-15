@@ -2,9 +2,8 @@ mod user;
 use user::{User};
 
 fn main() {
-    println!("Hello, world!");
 
-    let u = User::new(String::from("Rust"));
+   let u = User::new("223232", "hello");
 
-    println!("{}", u.id);
+   println!("{}", u);
 }
