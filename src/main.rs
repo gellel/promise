@@ -4,10 +4,9 @@ use user::{User};
 
 fn main() {
 
-   let u = User::default();
-   
-   //  g = &Generator::with_naming(Name::Plain).next().unwrap()[..];
+   let mut u = User::default();
 
+   u.name = String::from("hello");
+   
    println!("{}", u);
-   // println!("{}", g);
 }
