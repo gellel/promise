@@ -1,4 +1,5 @@
 use chrono::{DateTime, Utc};
+use names::{Generator, Name};
 use std::fmt;
 use std::collections::HashSet;
 use uuid::Uuid;
@@ -9,20 +10,20 @@ pub struct User<'a> {
     pub broken: HashSet<&'a str>,
     pub created: DateTime<Utc>,
     pub fulfilled: HashSet<&'a str>,
-    pub id: &'a str,
+    pub id: Uuid,
     pub name: &'a str,
     pub relationships: HashSet<&'a usize>,
 }
 
 impl<'a> User<'a> {
 
-    pub fn new(id: &'a str, name: &'a str) -> User<'a> {
+    pub fn new(name: &'a str) -> User<'a> {
         User {
             active: HashSet::new(),
             broken: HashSet::new(),
             created: Utc::now(),
             fulfilled: HashSet::new(),
-            id: id,
+            id: Uuid::new_v4(),
             name: name,
             relationships: HashSet::new(),
         }
@@ -44,8 +45,8 @@ impl Default for User<'static> {
             broken: HashSet::new(),
             created: Utc::now(),
             fulfilled: HashSet::new(),
-            id: "",
-            name: "",
+            id: Uuid::new_v4(),
+            name: &""[..],
             relationships: HashSet::new(),
         }
     }
