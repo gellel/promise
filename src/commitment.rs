@@ -4,6 +4,7 @@ use uuid::{Uuid};
 
 #[derive(Debug)]
 pub struct Commitment<'a> {
+    action: &'a str,
     category: &'a str,
     created: DateTime<Utc>,
     description: &'a str,

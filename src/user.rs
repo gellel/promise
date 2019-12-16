@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
-use std::fmt;
-use std::collections::HashSet;
-use uuid::Uuid;
+use std::collections::{HashSet};
+use std::{fmt};
+use uuid::{Uuid};
 
 #[derive(Debug)]
 pub struct User<'a> {

@@ -1,8 +1,8 @@
 mod step;
 
 use chrono::{DateTime, Utc};
-use std::fmt;
-use std::collections::HashSet;
+use std::collections::{HashSet};
+use std::{fmt};
 use step::{Step};
 use uuid::{Uuid};
 
@@ -18,7 +18,7 @@ pub struct Action<'a> {
     name: &'a mut str,
     next: &'a Action,
     start_date: Option<DateTime<Utc>>,
-    steps: Step,
+    step: &'a str,
     timed: bool,
 }
 

@@ -8,7 +8,7 @@ fn main() {
 
    let mut u = User::default();
 
-   let s = Step::new();
+   let s = Step::new(String::from("do something"));
 
    u.name = String::from("hello");
    
