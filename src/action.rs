@@ -15,3 +15,10 @@ pub struct Action<'a> {
     next: &'a Action,
     start_date: Option<DateTime<Utc>>
 }
+
+impl fmt::Display for Action<'_> {
+
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}
