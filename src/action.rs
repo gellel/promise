@@ -1,8 +1,12 @@
+mod step;
+
 use chrono::{DateTime, Utc};
 use std::fmt;
 use std::collections::HashSet;
+use step::{Step};
 use uuid::{Uuid};
 
+#[derive(Debug)]
 pub struct Action<'a> {
     category: &'a mut str,
     completed: bool,
@@ -13,7 +17,9 @@ pub struct Action<'a> {
     id: Uuid,
     name: &'a mut str,
     next: &'a Action,
-    start_date: Option<DateTime<Utc>>
+    start_date: Option<DateTime<Utc>>,
+    steps: Step,
+    timed: bool,
 }
 
 impl fmt::Display for Action<'_> {
