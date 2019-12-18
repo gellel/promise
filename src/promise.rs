@@ -4,8 +4,10 @@ use std::collections::{HashSet};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Promise {
+    pub actions: Option<HashSet<String>>,
     pub category: String,
     pub complete: bool,
+    pub contracts: Option<HashSet<String>>,
     pub created_at: DateTime<Utc>,
     pub description: String,
     pub end_at: Option<DateTime<Utc>>,
@@ -18,9 +20,9 @@ pub struct Promise {
     pub user_id: String,
 }
 
-impl Promise {
+impl ToString for Promise {
 
-    pub fn to_string(&self) -> String {
+    fn to_string(&self) -> String {
        serde_json::to_string(&self).unwrap()
     }
 }
