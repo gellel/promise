@@ -11,6 +11,7 @@ pub struct Action {
     pub labels: Option<HashSet<String>>,
     pub name: String,
     pub subcategory: String,
+    pub tasks: Option<HashSet<String>>,
     pub user_id: String,
 }
 
