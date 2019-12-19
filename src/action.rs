@@ -8,11 +8,18 @@ pub struct Action {
     pub completed: bool,
     pub description: String,
     pub id: String,
-    pub labels: Option<HashSet<String>>,
+    pub labels: Option<mut HashSet<String>>,
     pub name: String,
     pub subcategory: String,
-    pub tasks: Option<HashSet<String>>,
+    pub tasks: Option<mut HashSet<String>>,
     pub user_id: String,
+}
+
+impl PartialEq for Action {
+
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
 }
 
 impl ToString for Action {
