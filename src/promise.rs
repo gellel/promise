@@ -26,3 +26,9 @@ impl ToString for Promise {
        serde_json::to_string(&self).unwrap()
     }
 }
+
+impl PartialEq for Promise {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    } 
+}
