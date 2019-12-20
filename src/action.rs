@@ -6,6 +6,7 @@ pub struct Action {
     pub category: String,
     pub created_at: DateTime<Utc>,
     pub completed: bool,
+    pub completed_at: Option<DateTime<Utc>>,
     pub description: String,
     pub id: String,
     pub labels: Option<mut HashSet<String>>,
@@ -13,6 +14,14 @@ pub struct Action {
     pub subcategory: String,
     pub tasks: Option<mut HashSet<String>>,
     pub user_id: String,
+}
+
+impl Action {
+
+    pub fn complete_action(&mut self) {
+        self.completed = true;
+        self.completed_at = Utc::now();
+    }
 }
 
 impl PartialEq for Action {

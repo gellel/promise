@@ -16,8 +16,15 @@ pub struct Promise {
     pub name: String,
     pub start_at: Option<DateTime<Utc>>,
     pub subcategory: Option<String>,
-    pub to: HashSet<String>,
+    pub to: Option<HashSet<String>>,
     pub user_id: String,
+}
+
+
+impl PartialEq for Promise {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    } 
 }
 
 impl ToString for Promise {
@@ -25,10 +32,4 @@ impl ToString for Promise {
     fn to_string(&self) -> String {
        serde_json::to_string(&self).unwrap()
     }
-}
-
-impl PartialEq for Promise {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-    } 
 }

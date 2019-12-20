@@ -45,7 +45,7 @@ fn main() {
         name: String::from("walk the dog"),
         start_at: Some(Utc::now()),
         subcategory: None,
-        to: to,
+        to: Some(to),
         user_id: user_id,
     };
 
