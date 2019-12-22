@@ -1,68 +1,51 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use std::cmp::{Ordering};
 use std::collections::{HashSet};
-
-trait Break {
-    fn break_promise(&mut self);
-}
-
-trait Complete {
-    fn complete_promise(&mut self);
-}
-
-trait End {
-    fn end_promise(&mut self);
-}
-
-trait Kept {
-    fn kept_promise(&mut self);
-}
-
-trait Start {
-    fn start_promise(&mut self);
-}
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Promise {
     pub actions: Option<HashSet<String>>,
-    pub broken: bool,
-    pub category: String,
-    pub complete: bool,
+    pub broken: Option<bool>,
+    pub category: Option<String>,
+    pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
     pub contracts: Option<HashSet<String>>,
     pub created_at: DateTime<Utc>,
-    pub description: String,
+    pub description: Option<String>,
     pub end_at: Option<DateTime<Utc>>,
     pub id: String,
-    pub kept: bool,
+    pub kept: Option<bool>,
     pub labels: Option<HashSet<String>>,
-    pub name: String,
+    pub name: Option<String>,
     pub start_at: Option<DateTime<Utc>>,
     pub subcategory: Option<String>,
     pub to: Option<HashSet<String>>,
     pub user_id: String,
 }
 
-impl Break for Promise {
-    fn break_promise(&mut self) {
-        self.broken = true;
-    }
-}
 
-impl Complete for Promise {
-    fn complete_promise(&mut self) {
-        self.completed_at = Some(Utc::now());
+impl Eq for Promise {}
+
+impl Ord for Promise {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.created_at.cmp(&other.created_at)
     }
 }
 
 impl PartialEq for Promise {
     fn eq(&self, other: &Self) -> bool {
         self.id == other.id
-    } 
+    }
+}
+
+impl PartialOrd for Promise {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
 }
 
 impl ToString for Promise {
-
     fn to_string(&self) -> String {
        serde_json::to_string(&self).unwrap()
     }
