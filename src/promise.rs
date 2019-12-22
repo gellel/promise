@@ -2,24 +2,25 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
 use std::collections::{HashSet};
+use uuid::{Uuid};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Promise {
     pub actions: Option<HashSet<String>>,
     pub broken: Option<bool>,
-    pub category: Option<String>,
+    pub categories: Option<HashSet<String>>,
     pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
     pub contracts: Option<HashSet<String>>,
     pub created_at: DateTime<Utc>,
     pub description: Option<String>,
     pub end_at: Option<DateTime<Utc>>,
-    pub id: String,
+    pub id: Uuid,
     pub kept: Option<bool>,
     pub labels: Option<HashSet<String>>,
     pub name: Option<String>,
     pub start_at: Option<DateTime<Utc>>,
-    pub subcategory: Option<String>,
+    pub subcategories: Option<HashSet<String>>,
     pub to: Option<HashSet<String>>,
     pub user_id: String,
 }

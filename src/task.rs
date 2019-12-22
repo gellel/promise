@@ -5,24 +5,25 @@ use contract::{Contract};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
 use std::collections::{HashSet};
+use uuid::{Uuid};
 
 #[derive(Debug, Deserialize, Serialized)]
 pub struct Task {
-    pub category: String,
+    pub categories: Option<HashSet<String>>,
     pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
-    pub contracts: Option<mut HashSet<String>>,
+    pub contracts: Option<HashSet<String>>,
     pub created_at: DateTime<Utc>,
     pub description: String,
     pub end_at: Option<DateTime<Utc>>,
-    pub labels: Option<mut HashSet<String>>,
+    pub id: Uuid,
+    pub labels: Option<HashSet<String>>,
     pub rating: Option<u8>,
-    pub subcategory: String,
+    pub subcategories: Option<HashSet<String>>,
     pub started: bool,
     pub started_at: Option<DateTime<Utc>>,
     pub user_id: String,
 }
-
 
 impl Eq for Task {}
 

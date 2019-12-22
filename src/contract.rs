@@ -1,12 +1,13 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
+use uuid::{Uuid};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Contract {
     pub contracted_to: String,
     pub created_at: DateTime<Utc>,
-    pub id: String,
+    pub id: Uuid,
     pub signed: bool,
     pub signed_at: Option<DateTime<Utc>>,
     pub to: String,

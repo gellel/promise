@@ -1,22 +1,26 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
+use std::collections::{HashSet};
+use uuid::{Uuid};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Action {
-    pub categories: Option<mut HashSet<String>>,
+    pub categories: Option<HashSet<String>>,
     pub created_at: DateTime<Utc>,
     pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
-    pub contracts: Option<mut HashSet<String>>,
+    pub contracts: Option<HashSet<String>>,
     pub description: Option<String>,
-    pub id: String,
-    pub labels: Option<mut HashSet<String>>,
+    pub id: Uuid,
+    pub labels: Option<HashSet<String>>,
     pub name: Option<String>,
-    pub subcategories: Option<string>,
-    pub tasks: Option<mut HashSet<String>>,
+    pub subcategories: Option<HashSet<String>>,
+    pub tasks: Option<HashSet<String>>,
     pub user_id: String,
 }
+
+impl Action {}
 
 impl Eq for Action {}
 
@@ -39,7 +43,7 @@ impl PartialOrd for Action {
 }
 
 impl ToString for Action {
-    pub fn to_string(&self) -> String {
+    fn to_string(&self) -> String {
         serde_json::to_string(&self).unwrap()
     }
 }

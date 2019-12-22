@@ -8,9 +8,21 @@ use uuid::{Uuid};
 pub struct User {
     pub created_at: DateTime<Utc>,
     pub contracts: Option<HashSet<String>>,
-    pub id: String,
+    pub id: Uuid,
     pub name: Option<String>,
     pub promises: Option<HashSet<String>>,
+}
+
+impl User {
+    pub fn new() -> Self {
+        User {
+            created_at: Utc::now(),
+            contracts: None,
+            id: Uuid::new_v4(),
+            name: None,
+            promises: None,
+        }
+    }
 }
 
 impl Eq for User {}
