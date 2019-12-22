@@ -4,17 +4,17 @@ use std::cmp::{Ordering};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Action {
-    pub category: Option<HashSet<String>>,
+    pub categories: Option<mut HashSet<String>>,
     pub created_at: DateTime<Utc>,
     pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
-    pub contracts: Option<HashSet<String>>,
+    pub contracts: Option<mut HashSet<String>>,
     pub description: Option<String>,
     pub id: String,
-    pub labels: Option<HashSet<String>>,
+    pub labels: Option<mut HashSet<String>>,
     pub name: Option<String>,
-    pub subcategory: Option<string>,
-    pub tasks: Option<HashSet<String>>,
+    pub subcategories: Option<string>,
+    pub tasks: Option<mut HashSet<String>>,
     pub user_id: String,
 }
 
