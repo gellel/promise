@@ -29,8 +29,17 @@ impl User {
 }
 
 impl User {
-    pub fn add_promise(&mut self, promise: &Promise) -> bool {
+
+    pub fn contains_promise(&mut self, promise: &Promise) -> bool {
+        self.promises.as_mut().unwrap().contains(&promise.id)
+    }
+
+    pub fn insert_promise(&mut self, promise: &Promise) -> bool {
         self.promises.as_mut().unwrap().insert(promise.id)
+    }
+
+    pub fn remove_promise(&mut self, promise: &Promise) -> bool {
+        self.promises.as_mut().unwrap().remove(&promise.id)
     }
 }
 

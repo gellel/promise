@@ -33,11 +33,9 @@ fn main() {
 
     let mut u = User::new();
 
-    println!("{}", u.add_promise(&p));
+    println!("{}", u.insert_promise(&p));
 
-    for x in u.promises.unwrap().iter() {
-        println!("{}", x);
-    }
+    println!("{}", u.contains_promise(&p));
 
-    println!("{}", p.id);
+    println!("{}", u.to_string());
 }
