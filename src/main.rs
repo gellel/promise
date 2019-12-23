@@ -31,7 +31,13 @@ fn main() {
         user_id: Uuid::new_v4(),
     };
 
-    let u = User::new();
+    let mut u = User::new();
 
-    println!("{}", u.add_promise(p));
+    println!("{}", u.add_promise(&p));
+
+    for x in u.promises.unwrap().iter() {
+        println!("{}", x);
+    }
+
+    println!("{}", p.id);
 }

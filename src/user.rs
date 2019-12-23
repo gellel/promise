@@ -17,9 +17,20 @@ pub struct User {
 }
 
 impl User {
-    pub fn add_promise(&mut self, promise: Promise) -> bool {
-        let mut promises: &mut HashSet<Uuid> = self.promises.as_mut().unwrap();
-        promises.insert(promise.id)
+    pub fn new() -> User {
+        User {
+            created_at: Utc::now(),
+            contracts: Some(HashSet::new()),
+            id: Uuid::new_v4(),
+            name: None,
+            promises: Some(HashSet::new()),
+        }
+    }
+}
+
+impl User {
+    pub fn add_promise(&mut self, promise: &Promise) -> bool {
+        self.promises.as_mut().unwrap().insert(promise.id)
     }
 }
 

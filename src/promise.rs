@@ -25,9 +25,7 @@ pub struct Promise {
     pub user_id: Uuid,
 }
 
-impl Promise {
-
-}
+impl Promise {}
 
 impl Eq for Promise {}
 
