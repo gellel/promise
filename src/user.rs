@@ -1,27 +1,25 @@
+use crate::promise::{Promise};
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
 use std::collections::{HashSet};
 use uuid::{Uuid};
 
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct User {
     pub created_at: DateTime<Utc>,
-    pub contracts: Option<HashSet<String>>,
+    pub contracts: Option<HashSet<Uuid>>,
     pub id: Uuid,
     pub name: Option<String>,
-    pub promises: Option<HashSet<String>>,
+    pub promises: Option<HashSet<Uuid>>,
 }
 
 impl User {
-    pub fn new() -> Self {
-        User {
-            created_at: Utc::now(),
-            contracts: None,
-            id: Uuid::new_v4(),
-            name: None,
-            promises: None,
-        }
+    pub fn add_promise(&mut self, promise: Promise) -> bool {
+        let mut promises: &mut HashSet<Uuid> = self.promises.as_mut().unwrap();
+        promises.insert(promise.id)
     }
 }
 

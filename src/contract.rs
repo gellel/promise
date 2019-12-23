@@ -11,7 +11,7 @@ pub struct Contract {
     pub signed: bool,
     pub signed_at: Option<DateTime<Utc>>,
     pub to: String,
-    pub user_id: String,
+    pub user_id: Uuid,
 }
 
 impl Contract {}

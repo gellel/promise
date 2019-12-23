@@ -6,12 +6,12 @@ use uuid::{Uuid};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Promise {
-    pub actions: Option<HashSet<String>>,
+    pub actions: Option<HashSet<Uuid>>,
     pub broken: Option<bool>,
     pub categories: Option<HashSet<String>>,
     pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
-    pub contracts: Option<HashSet<String>>,
+    pub contracts: Option<HashSet<Uuid>>,
     pub created_at: DateTime<Utc>,
     pub description: Option<String>,
     pub end_at: Option<DateTime<Utc>>,
@@ -21,10 +21,13 @@ pub struct Promise {
     pub name: Option<String>,
     pub start_at: Option<DateTime<Utc>>,
     pub subcategories: Option<HashSet<String>>,
-    pub to: Option<HashSet<String>>,
-    pub user_id: String,
+    pub to: Option<HashSet<Uuid>>,
+    pub user_id: Uuid,
 }
 
+impl Promise {
+
+}
 
 impl Eq for Promise {}
 

@@ -1,3 +1,5 @@
+use crate::task::{Task};
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
@@ -15,12 +17,15 @@ pub struct Action {
     pub id: Uuid,
     pub labels: Option<HashSet<String>>,
     pub name: Option<String>,
+    pub promise: Uuid,
     pub subcategories: Option<HashSet<String>>,
-    pub tasks: Option<HashSet<String>>,
-    pub user_id: String,
+    pub tasks: Option<HashSet<Uuid>>,
+    pub user_id: Uuid,
 }
 
-impl Action {}
+impl Action {
+    
+}
 
 impl Eq for Action {}
 

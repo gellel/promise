@@ -1,20 +1,18 @@
-mod contract;
-
 use chrono::{DateTime, Utc};
-use contract::{Contract};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
 use std::collections::{HashSet};
 use uuid::{Uuid};
 
-#[derive(Debug, Deserialize, Serialized)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct Task {
+    pub action: Uuid,
     pub categories: Option<HashSet<String>>,
     pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
-    pub contracts: Option<HashSet<String>>,
+    pub contracts: Option<HashSet<Uuid>>,
     pub created_at: DateTime<Utc>,
-    pub description: String,
+    pub description: Option<String>,
     pub end_at: Option<DateTime<Utc>>,
     pub id: Uuid,
     pub labels: Option<HashSet<String>>,
@@ -22,7 +20,7 @@ pub struct Task {
     pub subcategories: Option<HashSet<String>>,
     pub started: bool,
     pub started_at: Option<DateTime<Utc>>,
-    pub user_id: String,
+    pub user_id: Uuid,
 }
 
 impl Eq for Task {}
@@ -47,6 +45,6 @@ impl PartialOrd for Task {
 
 impl ToString for Task {
     fn to_string(&self) -> String {
-        serde_json::to_string(&self)
+        serde_json::to_string(&self).unwrap()
     }
 }
