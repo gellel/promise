@@ -4,38 +4,26 @@ mod promise;
 mod task;
 mod user;
 
-use uuid::Uuid;
+use uuid::{Uuid};
 use chrono::Utc;
-
+use promise::{Promise};
 use user::{User};
 
 fn main() {
+    
+    let mut user_a: User = User::new();
 
-    let p = promise::Promise{
-        actions: None,
-        broken: None,
-        categories: None,
-        completed: false,
-        completed_at: None,
-        contracts: None,
-        created_at: Utc::now(),
-        description: None,
-        end_at: None,
-        id: Uuid::new_v4(),
-        kept: None,
-        labels: None,
-        name: None,
-        start_at: None,
-        subcategories: None,
-        to: None,
-        user_id: Uuid::new_v4(),
-    };
+    let mut promise: Promise = Promise::new(user_a.id);
 
-    let mut u = User::new();
+    let mut user_b: User = User::new();
 
-    println!("{}", u.insert_promise(&p));
+    user_a.insert_promise(promise.id);
 
-    println!("{}", u.contains_promise(&p));
+    promise.insert_to(user_b.id);
 
-    println!("{}", u.to_string());
+    
+    println!("{}", user_a.to_string());
+
+    println!("{}", promise.to_string());
+
 }

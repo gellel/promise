@@ -7,7 +7,6 @@ use uuid::{Uuid};
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Promise {
     pub actions: Option<HashSet<Uuid>>,
-    pub broken: Option<bool>,
     pub categories: Option<HashSet<String>>,
     pub completed: bool,
     pub completed_at: Option<DateTime<Utc>>,
@@ -15,8 +14,10 @@ pub struct Promise {
     pub created_at: DateTime<Utc>,
     pub description: Option<String>,
     pub end_at: Option<DateTime<Utc>>,
+    pub ended_at: Option<DateTime<Utc>>,
     pub id: Uuid,
-    pub kept: Option<bool>,
+    pub is_broken: Option<bool>,
+    pub is_kept: Option<bool>,
     pub labels: Option<HashSet<String>>,
     pub name: Option<String>,
     pub start_at: Option<DateTime<Utc>>,
@@ -25,7 +26,42 @@ pub struct Promise {
     pub user_id: Uuid,
 }
 
-impl Promise {}
+impl Promise {
+    pub fn new(user_id: Uuid) -> Promise {
+        Promise {
+            actions: Some(HashSet::new()),
+            categories: Some(HashSet::new()),
+            completed: false,
+            completed_at: None,
+            contracts: Some(HashSet::new()),
+            created_at: Utc::now(),
+            description: None,
+            end_at: None,
+            ended_at: None,
+            id: Uuid::new_v4(),
+            is_broken: None,
+            is_kept: None,
+            labels: Some(HashSet::new()),
+            name: None,
+            start_at: None,
+            subcategories: Some(HashSet::new()),
+            to: Some(HashSet::new()),
+            user_id: user_id,
+        }
+    }
+}
+
+impl Promise {
+    pub fn insert_action(&mut self, action_id: Uuid) -> bool {
+        self.actions.as_mut().unwrap().insert(action_id);
+    }
+}
+
+impl Promise {
+    pub fn insert_to(&mut self, user_id: Uuid) -> bool {
+        self.to.as_mut().unwrap().insert(user_id)
+    }
+}
 
 impl Eq for Promise {}
 

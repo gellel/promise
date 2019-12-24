@@ -1,3 +1,4 @@
+use crate::contract::{Contract};
 use crate::promise::{Promise};
 
 use chrono::{DateTime, Utc};
@@ -5,7 +6,6 @@ use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
 use std::collections::{HashSet};
 use uuid::{Uuid};
-
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct User {
@@ -22,24 +22,15 @@ impl User {
             created_at: Utc::now(),
             contracts: Some(HashSet::new()),
             id: Uuid::new_v4(),
-            name: None,
+            name: Some(String::from("")),
             promises: Some(HashSet::new()),
         }
     }
 }
 
 impl User {
-
-    pub fn contains_promise(&mut self, promise: &Promise) -> bool {
-        self.promises.as_mut().unwrap().contains(&promise.id)
-    }
-
-    pub fn insert_promise(&mut self, promise: &Promise) -> bool {
-        self.promises.as_mut().unwrap().insert(promise.id)
-    }
-
-    pub fn remove_promise(&mut self, promise: &Promise) -> bool {
-        self.promises.as_mut().unwrap().remove(&promise.id)
+    pub fn insert_promise(&mut self, promise_id: Uuid) -> bool {
+        self.promises.as_mut().unwrap().insert(promise_id)
     }
 }
 
