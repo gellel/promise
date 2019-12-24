@@ -29,8 +29,8 @@ impl User {
 }
 
 impl User {
-    pub fn insert_promise(&mut self, promise_id: Uuid) -> bool {
-        self.promises.as_mut().unwrap().insert(promise_id)
+    pub fn insert_promise(&mut self, promise: Promise) -> bool {
+        self.promises.as_mut().unwrap().insert(promise.id)
     }
 }
 

@@ -1,3 +1,7 @@
+use crate::action::{Action};
+use crate::contract::{Contract};
+use crate::user::{User};
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::cmp::{Ordering};
@@ -27,7 +31,7 @@ pub struct Promise {
 }
 
 impl Promise {
-    pub fn new(user_id: Uuid) -> Promise {
+    pub fn new(user: User) -> Promise {
         Promise {
             actions: Some(HashSet::new()),
             categories: Some(HashSet::new()),
@@ -46,20 +50,26 @@ impl Promise {
             start_at: None,
             subcategories: Some(HashSet::new()),
             to: Some(HashSet::new()),
-            user_id: user_id,
+            user_id: user.id,
         }
     }
 }
 
 impl Promise {
-    pub fn insert_action(&mut self, action_id: Uuid) -> bool {
-        self.actions.as_mut().unwrap().insert(action_id);
+    pub fn insert_action(&mut self, action: Action) -> bool {
+        self.actions.as_mut().unwrap().insert(action.id)
     }
 }
 
 impl Promise {
-    pub fn insert_to(&mut self, user_id: Uuid) -> bool {
-        self.to.as_mut().unwrap().insert(user_id)
+    pub fn insert_contract(&mut self, contract: Contract) -> bool {
+        self.contracts.as_mut().unwrap().insert(contract.id)
+    }
+}
+
+impl Promise {
+    pub fn insert_to(&mut self, user: User) -> bool {
+        self.to.as_mut().unwrap().insert(user.id)
     }
 }
 
