@@ -29,6 +29,12 @@ impl User {
 }
 
 impl User {
+    pub fn contains_contract(&mut self, contract: Contract) -> bool {
+        self.contracts.as_mut().unwrap().contains(contract.id)
+    }   
+}
+
+impl User {
     pub fn contains_promise(&mut self, promise: Promise) -> bool {
         self.promises.as_mut().unwrap().contains(promise.id)
     }
