@@ -21,6 +21,9 @@ pub struct Cx<T> {
 }
 
 impl<T> Cx<T> {
+    pub fn set_expire_at(&mut self, expire_at: usize) {
+        self.expire_at(expire_at);
+    }
 }
 impl<T> Cx<T> {
     pub fn set_sign(&mut self, sign_from: Uuid, sign_to: Uuid) {
