@@ -1,47 +1,53 @@
-use chrono::{DateTime, Utc};
+// use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::{Uuid};
 
-#[derive(Debug, Default, Deserialize, Serialize)]
-pub struct Cx<T> {
+#[derive(Debug, Default, Deserialize, Eq, Hash, PartialEq, PartialOrd, Serialize)]
+pub struct Cx {
     create_at: usize,
-    expire_at: usize,
-    from_key: T,
-    is_complete: bool,
-    is_ephemeral: Option<bool>,
+    id: Uuid,
     is_expire: bool,
     is_sign: bool,
-    is_symmetrical: bool,
-    owner: Uuid,
+    is_sign_from: bool,
+    is_sign_to: bool,
     sign_at: usize,
+    sign_at_from: usize,
+    sign_at_to: usize,
     sign_from: Uuid,
+    sign_from_key: String,
     sign_to: Uuid,
-    to_key: T,
-    uuid: Uuid,
+    sign_to_key: String,
 }
 
-impl<T> Cx<T> {
-    pub fn set_expire_at(&mut self, expire_at: usize) {
-        self.expire_at = expire_at;
-        self.is_expire();
-    }
-}
+impl Cx {
 
-impl<T> Cx<T> {
-    pub fn set_is_expire(&mut self) {
-        self.is_expire = !(self.expire_at == 0);
+    /// `sign_as_from` signs the contract as the `sign_from`.
+    /// 
+    /// `sign_as_from` relies on the `sign_from_private_key` being an asymmetric key.
+    ///
+    /// # Arguments
+    /// * `sign_from_private_key` - The stringified private key to verify it is the `sign_from` user.
+    /// 
+    /// # Example
+    /// // cx.sign_as_from(String:from(""));
+    /// 
+    pub fn sign_as_from(&mut self, sign_from_private_key: String) {
+        self.is_sign_from = true;
+        self.sign_at_from = 0;
     }
-}
 
-impl<T> Cx<T> {
-    pub fn set_sign(&mut self, sign_from: Uuid, sign_to: Uuid) {
-        self.set_sign_from(sign_from);
-        self.set_sign_to(sign_to);
-    }
-    pub fn set_sign_from(&mut self, sign_from: Uuid) {
-        self.sign_from = sign_from;
-    }
-    pub fn set_sign_to(&mut self, sign_to: Uuid) {
-        self.sign_to = sign_to;
+    /// `sign_as_to` signs the contract as the `sign_to`.
+    /// 
+    /// `sign_as_to` relies on the `sign_from_private_key` being an asymmetric key.
+    ///
+    /// # Arguments
+    /// * `sign_from_private_key` - The stringified private key to verify it is the `sign_from` user.
+    /// 
+    /// # Example
+    /// // cx.sign_as_to(String:from(""));
+    /// 
+    pub fn sign_as_to(&mut self, sign_to_private_key: String) {
+        self.is_sign_to = true;
+        self.sign_at_to = 0;
     }
 }
