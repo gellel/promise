@@ -84,6 +84,9 @@ impl Cx {
         self.is_sign_from = true;
         self.sign_at_from = Some(utc_now);
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
+        if self.is_sign {
+            self.sign_at = Some(utc_now.clone());
+        }
         return self.is_sign_from;
     }
 
@@ -101,6 +104,9 @@ impl Cx {
         self.is_sign_to = true;
         self.sign_at_to = Some(utc_now);
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
+        if self.is_sign {
+            self.sign_at = Some(utc_now.clone());
+        }
         return self.is_sign_to;
     }
 }
