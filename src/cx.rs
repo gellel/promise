@@ -90,9 +90,17 @@ impl Cx {
     /// `sign_as_to` cryptographically signs the `&cx` contract as the `sign_to` user.
     #[allow(dead_code)]
     pub fn sign_as_to(&mut self, _: String) -> bool {
+        let utc_now = Utc::now();
+        let is_expire = match self.expire_at {
+            None => false,
+            Some(utc_expire) => utc_now.lt(&utc_expire)
+        };
+        if is_expire {
+            return self.is_sign_to;
+        }
         self.is_sign_to = true;
-        self.sign_at_to = Some(Utc::now());
+        self.sign_at_to = Some(utc_now);
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
-        return self.is_sign;
+        return self.is_sign_to;
     }
 }
