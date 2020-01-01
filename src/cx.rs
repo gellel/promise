@@ -22,26 +22,34 @@ pub struct Cx {
 
 impl Cx {
 
-    /// `new` creates a new `Cx`.
-    /// 
-    /// `new` relies on the `sign_from` and `sign_to` user having
-    /// a valid `RSA_PUBLIC_KEY` that can be shared with the new `Cx`.
-    /// 
-    /// `new` does not set an expiry for the new `Cx`.
+    /// `new` creates new `Cx`.
     /// 
     /// # Arguments
-    /// * `sign_from` - The user `Uuid` that is being request to sign the `from` half of the contract.
-    /// * `sign_to` - The user `Uuid` that is being requested to sign the `to` half of the contract.
     /// 
+    /// * `sign_from` - The `uuid::Uuid` of the user to `clone` into the `&mut self.sign_from` field.
+    /// 
+    /// * `sign_to` - The `uuid::Uuid` of the user to `clone` into the `&mut self.sign_to` field.
+    /// 
+    /// # Returns
+    /// * `Cx{}` - The initialized `Cx`.
+    ///
     /// # Example
-    /// An example of creating a new `Cx` with a `sign_from` user and `sign_to` user.
     /// 
-    /// The `Cx` handles the `clone` of the `Uuid`.
+    /// Creating a new `&Cx{}`
+    ///
+    /// ```
+    /// use cx::Cx;
+    /// use uuid::Uuid;
+    ///
+    /// let sign_from = Uuid::new_v4();
+    /// let sign_to = Uuid::new_v4();
     /// 
-    /// ```let sign_from = Uuid::new_v4();```
-    /// ```let sign_to = Uuid::new_v4();```
-    /// ```let mut cx = Cx::new(sign_from, sign_to);```
+    /// let mut cx = Cx::new(sign_from, sign_to);
     /// 
+    /// println!("{:?}", cx);
+    /// ```
+    ///
+    #[allow(dead_code)]
     pub fn new(sign_from: Uuid, sign_to: Uuid) -> Cx {
         Cx{
             create_at: 0,
@@ -64,57 +72,27 @@ impl Cx {
 
 impl Cx {
     
-    /// `sign_as_from` signs the contract as the `sign_from` user.
-    /// 
-    /// `sign_as_from` relies on the `sign_from_private_key` being an asymmetric key.
-    /// and the asymmetric key being held in its signable state.
-    /// 
-    /// Returns the `is_sign` state after attempting to sign the `Cx`.
-    ///
-    /// # Arguments
-    /// * `sign_from_private_key` - The stringified private key to verify it is the `sign_from` user.
-    /// 
-    /// # Example
-    /// An example of signing the `Cx` as the `sign_from` user. 
-    /// The `RSA_PRIVATE_KEY` must be correspond to the
-    /// public key held by the `sign_from` user. If the signature cannot be
-    /// verified or the signing fails, the `Cx` is not mutated.
-    /// 
-    /// ```let mut cx = Cx::default();```
-    /// ```let sign_from_private_key = String::from("RSA_PRIVATE_KEY");```
-    /// ```cx.sign_as_from(sign_from_private_key);```
-    ///
-    pub fn sign_as_from(&mut self, sign_from_private_key: String) -> bool {
+    /// `sign_as_from` cryptographically signs the `&cx` contract as the `sign_as_from` user.
+    #[allow(dead_code)]
+    pub fn sign_as_from(&mut self, _: String) -> bool {
+        if self.is_expire {
+            return self.is_sign;
+        }
         self.is_sign_from = true;
         self.sign_at_from = 0;
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
-        self.is_sign
+        return self.is_sign;
     }
 
-    /// `sign_as_to` signs the contract as the `sign_to` user.
-    /// 
-    /// `sign_as_to` relies on the `sign_to_private_key` being an asymmetric key.
-    /// and the asymmetric key being held in its signable state.
-    /// 
-    /// Returns the `is_sign` state after attempting to sign the `Cx`.
-    ///
-    /// # Arguments
-    /// * `sign_to_private_key` - The stringified private key to verify it is the `sign_to` user.
-    /// 
-    /// # Example
-    /// An example of signing the `Cx` as the `sign_to` user. 
-    /// The `RSA_PRIVATE_KEY` must be correspond to the
-    /// public key held by the `sign_to` user. If the signature cannot be
-    /// verified or the signing fails, the `Cx` is not mutated.
-    /// 
-    /// ```let mut cx = Cx::default();```
-    /// ```let sign_to_private_key = String::from("RSA_PRIVATE_KEY");```
-    /// ```Cx.sign_as_to(sign_to_private_key);```
-    ///
-    pub fn sign_as_to(&mut self, sign_to_private_key: String) -> bool {
+    /// `sign_as_to` cryptographically signs the `&cx` contract as the `sign_to` user.
+    #[allow(dead_code)]
+    pub fn sign_as_to(&mut self, _: String) -> bool {
+        if self.is_expire {
+            return self.is_sign;
+        }
         self.is_sign_to = true;
         self.sign_at_to = 0;
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
-        self.is_sign
+        return self.is_sign;
     }
 }
