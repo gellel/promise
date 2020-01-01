@@ -1,19 +1,18 @@
-// use chrono::{DateTime, Utc};
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use uuid::{Uuid};
 
-#[derive(Debug, Default, Deserialize, Eq, Hash, PartialEq, PartialOrd, Serialize)]
+#[derive(Debug, Deserialize, Eq, Hash, PartialEq, PartialOrd, Serialize)]
 pub struct Cx {
-    create_at: usize,
-    expire_at: isize,
+    create_at: DateTime<Utc>,
+    expire_at: Option<DateTime<Utc>>,
     id: Uuid,
-    is_expire: bool,
     is_sign: bool,
     is_sign_from: bool,
     is_sign_to: bool,
-    sign_at: isize,
-    sign_at_from: isize,
-    sign_at_to: isize,
+    sign_at: Option<DateTime<Utc>>,
+    sign_at_from: Option<DateTime<Utc>>,
+    sign_at_to: Option<DateTime<Utc>>,
     sign_from: Uuid,
     sign_from_key: String,
     sign_to: Uuid,
@@ -52,20 +51,19 @@ impl Cx {
     #[allow(dead_code)]
     pub fn new(sign_from: Uuid, sign_to: Uuid) -> Cx {
         Cx{
-            create_at: 0,
-            expire_at: -1,
+            create_at: Utc::now(),
+            expire_at: None,
             id: Uuid::new_v4(),
-            is_expire: false,
             is_sign: false,
             is_sign_from: false,
             is_sign_to: false,
-            sign_at: -1,
-            sign_at_from: -1,
-            sign_at_to: -1,
+            sign_at: None,
+            sign_at_from: None,
+            sign_at_to: None,
             sign_from: sign_from.clone(),
-            sign_from_key: String::from("RSA_PUBLIC_KEY"),
+            sign_from_key: String::from(""),
             sign_to: sign_to.clone(),
-            sign_to_key: String::from("RSA_PUBLIC_KEY"),
+            sign_to_key: String::from(""),
         }
     }
 }
@@ -75,23 +73,25 @@ impl Cx {
     /// `sign_as_from` cryptographically signs the `&cx` contract as the `sign_as_from` user.
     #[allow(dead_code)]
     pub fn sign_as_from(&mut self, _: String) -> bool {
-        if self.is_expire {
-            return self.is_sign;
+        let utc_now = Utc::now();
+        let is_expire = match self.expire_at {
+            None => false,
+            Some(utc_expire) => utc_now.lt(&utc_expire)
+        };
+        if is_expire {
+            return self.is_sign_from;
         }
         self.is_sign_from = true;
-        self.sign_at_from = 0;
+        self.sign_at_from = Some(utc_now);
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
-        return self.is_sign;
+        return self.is_sign_from;
     }
 
     /// `sign_as_to` cryptographically signs the `&cx` contract as the `sign_to` user.
     #[allow(dead_code)]
     pub fn sign_as_to(&mut self, _: String) -> bool {
-        if self.is_expire {
-            return self.is_sign;
-        }
         self.is_sign_to = true;
-        self.sign_at_to = 0;
+        self.sign_at_to = Some(Utc::now());
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
         return self.is_sign;
     }
