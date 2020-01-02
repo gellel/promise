@@ -69,20 +69,34 @@ impl Cx {
 }
 
 impl Cx {
+
+    pub fn is_current(&mut self) -> bool {
+        let utc_now = Utc::now();
+        match &self.expire_at {
+            None => false,
+            Some(utc_expire) => utc_now.lt(utc_expire)
+        }
+    }
+
+    pub fn is_not_current(&mut self) -> bool {
+        return self.is_current() == false
+    }
+
+    /// `can_sign_from` validates the `&cx` can be signed as the `sign_from` user.
+    #[allow(dead_code)]
+    pub fn can_sign_from(&mut self) -> bool {
+        return false;
+    }
     
-    /// `sign_as_from` cryptographically signs the `&cx` contract as the `sign_as_from` user.
+    /// `sign_as_from` cryptographically signs the `&cx` contract as the `sign_from` user.
     #[allow(dead_code)]
     pub fn sign_as_from(&mut self, _: String) -> bool {
         let utc_now = Utc::now();
-        let is_expire = match self.expire_at {
-            None => false,
-            Some(utc_expire) => utc_now.lt(&utc_expire)
-        };
-        if is_expire {
+        if self.is_not_current() {
             return self.is_sign_from;
         }
         self.is_sign_from = true;
-        self.sign_at_from = Some(utc_now);
+        self.sign_at_from = Some(utc_now.clone());
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
         if self.is_sign {
             self.sign_at = Some(utc_now.clone());
@@ -94,11 +108,7 @@ impl Cx {
     #[allow(dead_code)]
     pub fn sign_as_to(&mut self, _: String) -> bool {
         let utc_now = Utc::now();
-        let is_expire = match self.expire_at {
-            None => false,
-            Some(utc_expire) => utc_now.lt(&utc_expire)
-        };
-        if is_expire {
+        if self.is_not_current() {
             return self.is_sign_to;
         }
         self.is_sign_to = true;
