@@ -70,6 +70,8 @@ impl Cx {
 
 impl Cx {
 
+    /// `is_current` asserts if the `&mut self`
+    /// has not passed its permitted signature timestamp.
     pub fn is_current(&mut self) -> bool {
         let utc_now = Utc::now();
         match &self.expire_at {
@@ -78,21 +80,49 @@ impl Cx {
         }
     }
 
+    /// `is_not_current` asserts if the `&mut self`
+    /// has passed its permitted signature timestamp.
     pub fn is_not_current(&mut self) -> bool {
         return self.is_current() == false
     }
 
-    /// `can_sign_from` validates the `&cx` can be signed as the `sign_from` user.
+    /// `can_sign_from` asserts if the `&mut self` 
+    /// can be cryptographically signed as the `&self.sign_from` user.
     #[allow(dead_code)]
     pub fn can_sign_from(&mut self) -> bool {
-        return false;
+        return self.is_current() && self.sign_at_from.is_none();
+    }
+
+    /// `can_sign_to` asserts if the `&mut self` 
+    /// can be cryptographically signed as the `&self.sign_from` user.
+    #[allow(dead_code)]
+    pub fn can_sign_to(&mut self) -> bool {
+        return self.is_current() && self.sign_at_to.is_none();
+    }
+
+    /// `can_not_sign_from` asserts if the `&mut self` 
+    /// cannot be cryptographically signed as the `&self.sign_from` user.
+    #[allow(dead_code)]
+    pub fn can_not_sign_from(&mut self) -> bool {
+        return self.can_sign_from() == false;
+    }
+
+    /// `can_not_sign_to` asserts if the `&mut self` 
+    /// cannot be cryptographically signed as the `&self.sign_to` user.
+    #[allow(dead_code)]
+    pub fn can_not_sign_to(&mut self) -> bool {
+        return self.can_sign_to() == false;
     }
     
-    /// `sign_as_from` cryptographically signs the `&cx` contract as the `sign_from` user.
+    /// `sign_as_from` cryptographically signs the `&mut self`
+    /// as the `&self.sign_from` user.
+    /// 
+    /// uses the `&self.sign_from_key` to validate the
+    /// incoming signature.
     #[allow(dead_code)]
     pub fn sign_as_from(&mut self, _: String) -> bool {
         let utc_now = Utc::now();
-        if self.is_not_current() {
+        if self.can_not_sign_to() {
             return self.is_sign_from;
         }
         self.is_sign_from = true;
@@ -104,7 +134,11 @@ impl Cx {
         return self.is_sign_from;
     }
 
-    /// `sign_as_to` cryptographically signs the `&cx` contract as the `sign_to` user.
+    /// `sign_as_to` cryptographically signs the `&mut self`
+    /// as the `&self.sign_to` user.
+    /// 
+    /// uses the `&self.sign_to_key` to validate the
+    /// incoming signature.
     #[allow(dead_code)]
     pub fn sign_as_to(&mut self, _: String) -> bool {
         let utc_now = Utc::now();
