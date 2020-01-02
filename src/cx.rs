@@ -70,11 +70,38 @@ impl Cx {
 
 impl Cx {
 
+    #[allow(dead_code)]
+    fn set_sign_at(&mut self, utc_now: DateTime<Utc>) -> bool {
+        self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
+        if self.is_sign {
+            self.sign_at = Some(utc_now.clone());
+        }
+        return self.is_sign;
+    }
+
+    #[allow(dead_code)]
+    fn set_sign_at_from(&mut self, utc_sign_at_from: DateTime<Utc>) -> bool {
+        let utc_now = Utc::now();
+        self.sign_at_from = Some(utc_sign_at_from.clone());
+        return utc_now.lt(&utc_sign_at_from);
+    }
+
+    #[allow(dead_code)]
+    fn set_sign_at_to(&mut self, utc_sign_at_to: DateTime<Utc>) -> bool {
+        let utc_now = Utc::now();
+        self.sign_at_from = Some(utc_sign_at_to.clone());
+        return utc_now.lt(&utc_sign_at_to);
+    }
+}
+
+impl Cx {
+
     /// `is_current` asserts if the `&mut self`
     /// has not passed its permitted signature timestamp.
+    #[allow(dead_code)]
     pub fn is_current(&mut self) -> bool {
         let utc_now = Utc::now();
-        match &self.expire_at {
+        match &mut self.expire_at {
             None => false,
             Some(utc_expire) => utc_now.lt(utc_expire)
         }
@@ -82,42 +109,43 @@ impl Cx {
 
     /// `is_not_current` asserts if the `&mut self`
     /// has passed its permitted signature timestamp.
+    #[allow(dead_code)]
     pub fn is_not_current(&mut self) -> bool {
         return self.is_current() == false
     }
 
     /// `can_sign_from` asserts if the `&mut self` 
-    /// can be cryptographically signed as the `&self.sign_from` user.
+    /// can be cryptographically signed as the `&mut self.sign_from` user.
     #[allow(dead_code)]
     pub fn can_sign_from(&mut self) -> bool {
         return self.is_current() && self.sign_at_from.is_none();
     }
 
     /// `can_sign_to` asserts if the `&mut self` 
-    /// can be cryptographically signed as the `&self.sign_from` user.
+    /// can be cryptographically signed as the `&mut self.sign_from` user.
     #[allow(dead_code)]
     pub fn can_sign_to(&mut self) -> bool {
         return self.is_current() && self.sign_at_to.is_none();
     }
 
     /// `can_not_sign_from` asserts if the `&mut self` 
-    /// cannot be cryptographically signed as the `&self.sign_from` user.
+    /// cannot be cryptographically signed as the `&mut self.sign_from` user.
     #[allow(dead_code)]
     pub fn can_not_sign_from(&mut self) -> bool {
         return self.can_sign_from() == false;
     }
 
     /// `can_not_sign_to` asserts if the `&mut self` 
-    /// cannot be cryptographically signed as the `&self.sign_to` user.
+    /// cannot be cryptographically signed as the `&mut self.sign_to` user.
     #[allow(dead_code)]
     pub fn can_not_sign_to(&mut self) -> bool {
         return self.can_sign_to() == false;
     }
     
     /// `sign_as_from` cryptographically signs the `&mut self`
-    /// as the `&self.sign_from` user.
+    /// as the `&mut self.sign_from` user.
     /// 
-    /// uses the `&self.sign_from_key` to validate the
+    /// uses the `&mut self.sign_from_key` to validate the
     /// incoming signature.
     #[allow(dead_code)]
     pub fn sign_as_from(&mut self, _: String) -> bool {
@@ -126,18 +154,15 @@ impl Cx {
             return self.is_sign_from;
         }
         self.is_sign_from = true;
-        self.sign_at_from = Some(utc_now.clone());
-        self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
-        if self.is_sign {
-            self.sign_at = Some(utc_now.clone());
-        }
+        self.set_sign_at_from(utc_now);
+        self.set_sign_at(utc_now);
         return self.is_sign_from;
     }
 
     /// `sign_as_to` cryptographically signs the `&mut self`
-    /// as the `&self.sign_to` user.
+    /// as the `&mut self.sign_to` user.
     /// 
-    /// uses the `&self.sign_to_key` to validate the
+    /// uses the `&mut self.sign_to_key` to validate the
     /// incoming signature.
     #[allow(dead_code)]
     pub fn sign_as_to(&mut self, _: String) -> bool {
@@ -146,11 +171,8 @@ impl Cx {
             return self.is_sign_to;
         }
         self.is_sign_to = true;
-        self.sign_at_to = Some(utc_now);
-        self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
-        if self.is_sign {
-            self.sign_at = Some(utc_now.clone());
-        }
+        self.set_sign_at_to(utc_now);
+        self.set_sign_at(utc_now);
         return self.is_sign_to;
     }
 }
