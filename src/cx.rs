@@ -148,6 +148,19 @@ impl Cx {
     /// 
     /// uses the `&mut self.sign_from_key` to validate the
     /// incoming signature.
+    /// 
+    /// `sign_as_from` can return false on two cases.
+    /// 
+    /// The first case is where `&mut self` contains a non `None`
+    /// `&mut self.expire_at`. If `&mut self.expire_at` is not `None`
+    /// and the `Utc::now` is later than `&mut self.expire_at` `sign_as_from`
+    /// returns `false` and does not update `&mut self`.
+    /// 
+    /// The last case is where `&mut self` cannot use the argument
+    /// `sign_as_from_key`. If `&mut self` cannot use the `sign_as_from_key`
+    /// `sign_as_from` returns `false` and does not update `&mut self`.
+    /// 
+    /// On success returns `true` and `&mut self` is appropriately modified.
     #[allow(dead_code)]
     pub fn sign_as_from(&mut self, _: String) -> bool {
         let utc_now = Utc::now();
