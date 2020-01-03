@@ -1,8 +1,9 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+use std::cmp::{Ord, Ordering};
 use uuid::{Uuid};
 
-#[derive(Debug, Deserialize, Eq, Hash, PartialEq, PartialOrd, Serialize)]
+#[derive(Debug, Deserialize, Eq, Hash, Serialize)]
 pub struct Cx {
     create_at: DateTime<Utc>,
     expire_at: Option<DateTime<Utc>>,
@@ -71,10 +72,10 @@ impl Cx {
 impl Cx {
 
     #[allow(dead_code)]
-    fn set_sign_at(&mut self, utc_now: DateTime<Utc>) -> bool {
+    fn set_sign_at(&mut self, utc_sign_at: DateTime<Utc>) -> bool {
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
         if self.is_sign {
-            self.sign_at = Some(utc_now.clone());
+            self.sign_at = Some(utc_sign_at.clone());
         }
         return self.is_sign;
     }
@@ -102,7 +103,7 @@ impl Cx {
     pub fn is_current(&mut self) -> bool {
         let utc_now = Utc::now();
         match &mut self.expire_at {
-            None => false,
+            None => true,
             Some(utc_expire) => utc_now.lt(utc_expire)
         }
     }
@@ -115,35 +116,35 @@ impl Cx {
     }
 
     /// `can_sign_from` asserts if the `&mut self` 
-    /// can be cryptographically signed as the `&mut self.sign_from` user.
+    /// can be cryptographically signed as the `&mut self.sign_from`.
     #[allow(dead_code)]
     pub fn can_sign_from(&mut self) -> bool {
         return self.is_current() && self.sign_at_from.is_none();
     }
 
     /// `can_sign_to` asserts if the `&mut self` 
-    /// can be cryptographically signed as the `&mut self.sign_from` user.
+    /// can be cryptographically signed as the `&mut self.sign_from`.
     #[allow(dead_code)]
     pub fn can_sign_to(&mut self) -> bool {
         return self.is_current() && self.sign_at_to.is_none();
     }
 
     /// `can_not_sign_from` asserts if the `&mut self` 
-    /// cannot be cryptographically signed as the `&mut self.sign_from` user.
+    /// cannot be cryptographically signed as the `&mut self.sign_from`.
     #[allow(dead_code)]
     pub fn can_not_sign_from(&mut self) -> bool {
         return self.can_sign_from() == false;
     }
 
     /// `can_not_sign_to` asserts if the `&mut self` 
-    /// cannot be cryptographically signed as the `&mut self.sign_to` user.
+    /// cannot be cryptographically signed as the `&mut self.sign_to`.
     #[allow(dead_code)]
     pub fn can_not_sign_to(&mut self) -> bool {
         return self.can_sign_to() == false;
     }
     
     /// `sign_as_from` cryptographically signs the `&mut self`
-    /// as the `&mut self.sign_from` user.
+    /// as the `&mut self.sign_from`.
     /// 
     /// uses the `&mut self.sign_from_key` to validate the
     /// incoming signature.
@@ -160,7 +161,7 @@ impl Cx {
     }
 
     /// `sign_as_to` cryptographically signs the `&mut self`
-    /// as the `&mut self.sign_to` user.
+    /// as the `&mut self.sign_to`.
     /// 
     /// uses the `&mut self.sign_to_key` to validate the
     /// incoming signature.
@@ -174,5 +175,23 @@ impl Cx {
         self.set_sign_at_to(utc_now);
         self.set_sign_at(utc_now);
         return self.is_sign_to;
+    }
+}
+
+impl Ord for Cx {
+    fn cmp(&self, other: &Self) -> Ordering {
+        return self.create_at.cmp(&other.create_at);
+    }
+}
+
+impl PartialEq for Cx {
+    fn eq(&self, other: &Self) -> bool {
+        return self.create_at == other.create_at;
+    }
+}
+
+impl PartialOrd for Cx {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        return Some(self.cmp(other));
     }
 }

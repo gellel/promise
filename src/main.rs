@@ -1,29 +1,17 @@
-mod action;
-mod contract;
-mod promise;
-mod task;
-mod user;
+mod cx;
 
+use cx::{Cx};
 use uuid::{Uuid};
-use chrono::Utc;
-use promise::{Promise};
-use user::{User};
 
 fn main() {
     
-    let mut user_a: User = User::new();
+    let mut cx = Cx::new(Uuid::new_v4(), Uuid::new_v4());
 
-    let mut promise: Promise = Promise::new(user_a);
+    println!("{}", cx.sign_as_from(String::from("")));
 
-    let mut user_b: User = User::new();
+    println!("{:?}", cx);
 
-    user_a.insert_promise(promise);
+    println!("{}", cx.sign_as_to(String::from("")));
 
-    promise.insert_to(user_b);
-
-    
-    println!("{}", user_a.to_string());
-
-    println!("{}", promise.to_string());
-
+    println!("{:?}", cx);
 }
