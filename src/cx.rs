@@ -11,6 +11,7 @@ pub struct Cx {
     is_sign: bool,
     is_sign_from: bool,
     is_sign_to: bool,
+    ref_id: Uuid,
     sign_at: Option<DateTime<Utc>>,
     sign_at_from: Option<DateTime<Utc>>,
     sign_at_to: Option<DateTime<Utc>>,
@@ -50,7 +51,7 @@ impl Cx {
     /// ```
     ///
     #[allow(dead_code)]
-    pub fn new(sign_from: Uuid, sign_to: Uuid) -> Cx {
+    pub fn new(ref_id: Uuid, sign_from: Uuid, sign_to: Uuid) -> Cx {
         Cx{
             create_at: Utc::now(),
             expire_at: None,
@@ -58,6 +59,7 @@ impl Cx {
             is_sign: false,
             is_sign_from: false,
             is_sign_to: false,
+            ref_id: ref_id.clone(),
             sign_at: None,
             sign_at_from: None,
             sign_at_to: None,
@@ -79,19 +81,43 @@ impl Cx {
         }
         return self.is_sign;
     }
-
+    
+    /// `set_sign_at_from` sets the `&mut self.sign_at_from` 
+    /// to the argument `utc_sign_at_from`.
+    /// 
+    /// `set_sign_at_from` returns a boolean indicating whether the
+    /// argument `utc_sign_at_from` successfully mutated `&mut self.sign_at_to`.
+    /// 
+    /// `set_sign_at_from` is only modified if the argument `utc_sign_at_from`
+    /// is earlier than the current UTC time.
     #[allow(dead_code)]
     fn set_sign_at_from(&mut self, utc_sign_at_from: DateTime<Utc>) -> bool {
         let utc_now = Utc::now();
+        let is_earlier = utc_now.gt(&utc_sign_at_from);
+        if !is_earlier {
+            return is_earlier;
+        }
         self.sign_at_from = Some(utc_sign_at_from.clone());
-        return utc_now.lt(&utc_sign_at_from);
+        return is_earlier;
     }
 
+    /// `set_sign_at_to` sets the `&mut self.sign_at_to`
+    /// to the argument `utc_sign_at_to`.
+    /// 
+    /// `set_sign_at_to` returns a boolean indicating whether the
+    /// argument `utc_sign_at_to` successfully mutated `&mut self.sign_at_to`.
+    /// 
+    /// `set_sign_at_to` is only modified if the argument `utc_sign_at_to`
+    /// is earlier than the current UTC time.
     #[allow(dead_code)]
     fn set_sign_at_to(&mut self, utc_sign_at_to: DateTime<Utc>) -> bool {
         let utc_now = Utc::now();
-        self.sign_at_from = Some(utc_sign_at_to.clone());
-        return utc_now.lt(&utc_sign_at_to);
+        let is_earlier = utc_now.gt(&utc_sign_at_to);
+        if !is_earlier {
+            return is_earlier;
+        }
+        self.sign_at_to = Some(utc_sign_at_to.clone());
+        return is_earlier;
     }
 }
 
