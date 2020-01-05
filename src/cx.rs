@@ -76,13 +76,15 @@ impl Cx {
     /// `set_sign_at` sets `&mut self.sign_at` to the
     /// argument `utc_sign_at`.
     /// 
-    /// `set_sign_at` returns a boolean indicating whether the
+    /// `set_sign_at` returns a `bool` indicating whether the
     /// argument `utc_sign_at` successfully mutated `&mut self.is_sign`
     /// and `&mut self.sign_at`. 
     /// 
     /// `set_sign_at` can only mutate `&mut self.is_sign` and `&mut self.sign_at`
     /// if both `&mut self.is_sign_from` && `mut self.is_sign_to` are
     /// both `true`.
+    /// 
+    /// `set_sign_at` does not take ownership of `utc_sign_at`.
     #[allow(dead_code)]
     fn set_sign_at(&mut self, utc_sign_at: DateTime<Utc>) -> bool {
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
@@ -95,11 +97,13 @@ impl Cx {
     /// `set_sign_at_from` sets the `&mut self.sign_at_from` 
     /// to the argument `utc_sign_at_from`.
     /// 
-    /// `set_sign_at_from` returns a boolean indicating whether the
+    /// `set_sign_at_from` returns a `bool` indicating whether the
     /// argument `utc_sign_at_from` successfully mutated `&mut self.sign_at_to`.
     /// 
     /// `set_sign_at_from` is only modified if the argument `utc_sign_at_from`
     /// is earlier than the current UTC time.
+    /// 
+    /// `set_sign_at_from` does not take ownership of `utc_sign_at_from`.
     #[allow(dead_code)]
     fn set_sign_at_from(&mut self, utc_sign_at_from: DateTime<Utc>) -> bool {
         let utc_now = Utc::now();
@@ -114,7 +118,7 @@ impl Cx {
     /// `set_sign_at_to` sets the `&mut self.sign_at_to`
     /// to the argument `utc_sign_at_to`.
     /// 
-    /// `set_sign_at_to` returns a boolean indicating whether the
+    /// `set_sign_at_to` returns a `bool` indicating whether the
     /// argument `utc_sign_at_to` successfully mutated `&mut self.sign_at_to`.
     /// 
     /// `set_sign_at_to` is only modified if the argument `utc_sign_at_to`
