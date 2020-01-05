@@ -73,6 +73,16 @@ impl Cx {
 
 impl Cx {
 
+    /// `set_sign_at` sets `&mut self.sign_at` to the
+    /// argument `utc_sign_at`.
+    /// 
+    /// `set_sign_at` returns a boolean indicating whether the
+    /// argument `utc_sign_at` successfully mutated `&mut self.is_sign`
+    /// and `&mut self.sign_at`. 
+    /// 
+    /// `set_sign_at` can only mutate `&mut self.is_sign` and `&mut self.sign_at`
+    /// if both `&mut self.is_sign_from` && `mut self.is_sign_to` are
+    /// both `true`.
     #[allow(dead_code)]
     fn set_sign_at(&mut self, utc_sign_at: DateTime<Utc>) -> bool {
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
