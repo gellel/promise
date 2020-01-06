@@ -23,33 +23,17 @@ pub struct Cx {
 
 impl Cx {
 
-    /// `new` creates new `Cx`.
+    /// `new` creates a new `Cx`.
     /// 
-    /// # Arguments
+    /// `new` requires three unique `Uuid` to compose a new `Cx`. 
     /// 
-    /// * `sign_from` - The `uuid::Uuid` of the user to `clone` into the `&mut self.sign_from` field.
+    /// `new` does not take ownership of `ref_id`, `sign_from` or `sign_to`.
     /// 
-    /// * `sign_to` - The `uuid::Uuid` of the user to `clone` into the `&mut self.sign_to` field.
+    /// `ref_id` is the `Uuid` of the `struct` the `Cx` is owned by.  
     /// 
-    /// # Returns
-    /// * `Cx{}` - The initialized `Cx`.
-    ///
-    /// # Example
+    /// `sign_from` is the `Uuid` of the user that is signing from. 
     /// 
-    /// Creating a new `&Cx{}`
-    ///
-    /// ```
-    /// use cx::Cx;
-    /// use uuid::Uuid;
-    ///
-    /// let sign_from = Uuid::new_v4();
-    /// let sign_to = Uuid::new_v4();
-    /// 
-    /// let mut cx = Cx::new(sign_from, sign_to);
-    /// 
-    /// println!("{:?}", cx);
-    /// ```
-    ///
+    /// `sign_to` is the `Uuid` of the user that is signing to. 
     #[allow(dead_code)]
     pub fn new(ref_id: Uuid, sign_from: Uuid, sign_to: Uuid) -> Cx {
         Cx{
