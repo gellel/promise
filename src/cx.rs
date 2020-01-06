@@ -57,18 +57,18 @@ impl Cx {
 
 impl Cx {
 
-    /// `set_sign_at` sets `&mut self.sign_at` to the
+    /// `&mut self.set_sign_at` sets `&mut self.sign_at` to the
     /// argument `utc_sign_at`.
     /// 
-    /// `set_sign_at` returns a `bool` indicating whether the
+    /// `&mut self.set_sign_at` returns a `bool` indicating whether the
     /// argument `utc_sign_at` successfully mutated `&mut self.is_sign`
     /// and `&mut self.sign_at`. 
     /// 
-    /// `set_sign_at` can only mutate `&mut self.is_sign` and `&mut self.sign_at`
+    /// `&mut self.set_sign_at` can only mutate `&mut self.is_sign` and `&mut self.sign_at`
     /// if both `&mut self.is_sign_from` && `mut self.is_sign_to` are
     /// both `true`.
     /// 
-    /// `set_sign_at` does not take ownership of `utc_sign_at`.
+    /// `&mut self.set_sign_at` does not take ownership of `utc_sign_at`.
     #[allow(dead_code)]
     fn set_sign_at(&mut self, utc_sign_at: DateTime<Utc>) -> bool {
         self.is_sign = self.is_sign_from == true && self.is_sign_to == true;
@@ -78,16 +78,16 @@ impl Cx {
         return self.is_sign;
     }
     
-    /// `set_sign_at_from` sets the `&mut self.sign_at_from` 
+    /// `&mut self.set_sign_at_from` sets the `&mut self.sign_at_from` 
     /// to the argument `utc_sign_at_from`.
     /// 
-    /// `set_sign_at_from` returns a `bool` indicating whether the
+    /// `&mut self.set_sign_at_from` returns a `bool` indicating whether the
     /// argument `utc_sign_at_from` successfully mutated `&mut self.sign_at_to`.
     /// 
-    /// `set_sign_at_from` is only modified if the argument `utc_sign_at_from`
+    /// `&mut self.set_sign_at_from` is only modified if the argument `utc_sign_at_from`
     /// is earlier than the current UTC time.
     /// 
-    /// `set_sign_at_from` does not take ownership of `utc_sign_at_from`.
+    /// `&mut self.set_sign_at_from` does not take ownership of `utc_sign_at_from`.
     #[allow(dead_code)]
     fn set_sign_at_from(&mut self, utc_sign_at_from: DateTime<Utc>) -> bool {
         let utc_now = Utc::now();
@@ -99,13 +99,13 @@ impl Cx {
         return is_earlier;
     }
 
-    /// `set_sign_at_to` sets the `&mut self.sign_at_to`
+    /// `&mut self.set_sign_at_to` sets the `&mut self.sign_at_to`
     /// to the argument `utc_sign_at_to`.
     /// 
-    /// `set_sign_at_to` returns a `bool` indicating whether the
+    /// `&mut self.set_sign_at_to` returns a `bool` indicating whether the
     /// argument `utc_sign_at_to` successfully mutated `&mut self.sign_at_to`.
     /// 
-    /// `set_sign_at_to` is only modified if the argument `utc_sign_at_to`
+    /// `&mut self.set_sign_at_to` is only modified if the argument `utc_sign_at_to`
     /// is earlier than the current UTC time.
     #[allow(dead_code)]
     fn set_sign_at_to(&mut self, utc_sign_at_to: DateTime<Utc>) -> bool {
@@ -190,22 +190,22 @@ impl Cx {
         return self.can_sign_to() == false;
     }
     
-    /// `sign_as_from` cryptographically signs the `&mut self`
+    /// `&mut self.sign_as_from` cryptographically signs the `&mut self`
     /// as the `&mut self.sign_from`.
     /// 
-    /// uses the `&mut self.sign_from_key` to validate the
+    /// `&mut self.sign_as_from` uses the `&mut self.sign_from_key` to validate the
     /// incoming signature.
     /// 
-    /// `sign_as_from` can return `false` on two cases.
+    /// `&mut self.sign_as_from` can return `false` on two cases.
     /// 
     /// The first case is where `&mut self` contains a non `None`
     /// `&mut self.expire_at`. If `&mut self.expire_at` is not `None`
     /// and the current UTC is later than `&mut self.expire_at` 
-    /// `sign_as_from` returns `false` and does not update `&mut self`.
+    /// `&mut self.sign_as_from` returns `false` and does not update `&mut self`.
     /// 
     /// The last case is where `&mut self` cannot use the argument
     /// `sign_as_from_key`. If `&mut self` cannot use the `sign_as_from_key`
-    /// `sign_as_from` returns `false` and does not update `&mut self`.
+    /// `&mut self.sign_as_from` returns `false` and does not update `&mut self`.
     /// 
     /// On success returns `true` and `&mut self` is appropriately modified.
     #[allow(dead_code)]
@@ -220,22 +220,22 @@ impl Cx {
         return self.is_sign_from;
     }
 
-    /// `sign_as_to` cryptographically signs the `&mut self`
+    /// `&mut self.sign_as_to` cryptographically signs the `&mut self`
     /// as the `&mut self.sign_to`.
     /// 
-    /// uses the `&mut self.sign_to_key` to validate the
+    /// `&mut self.sign_as_to` uses the `&mut self.sign_to_key` to validate the
     /// incoming signature.
     /// 
-    /// `sign_as_to` can return `false` on two cases.
+    /// `&mut self.sign_as_to` can return `false` on two cases.
     /// 
     /// The first case is where `&mut self` contains a non `None`
     /// `&mut self.expire_at`. If `&mut self.expire_at` is not `None`
     /// and the current UTC is later than `&mut self.expire_at` 
-    /// `sign_as_to` returns `false` and does not update `&mut self`.
+    /// `&mut self.sign_as_to` returns `false` and does not update `&mut self`.
     /// 
     /// The last case is where `&mut self` cannot use the argument
     /// `sign_as_to_key`. If `&mut self` cannot use the `sign_as_to_key`
-    /// `sign_as_to` returns `false` and does not update `&mut self`.
+    /// `&mut self.sign_as_to` returns `false` and does not update `&mut self`.
     /// 
     /// On success returns `true` and `&mut self` is appropriately modified.
     #[allow(dead_code)]
