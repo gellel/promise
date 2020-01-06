@@ -121,8 +121,11 @@ impl Cx {
 
 impl Cx {
 
-    /// `is_current` asserts if the `&mut self`
-    /// has not passed its permitted signature timestamp.
+    /// `&mut self.is_current` asserts that `&mut self` has not exceed its expiry. 
+    /// 
+    /// `&mut self.is_current` is considered current on the condition 
+    /// `&mut self.expire_at` is either `None` or `&mut self.expire_at` is `gt`
+    /// the current UTC timestamp. 
     #[allow(dead_code)]
     pub fn is_current(&mut self) -> bool {
         let utc_now = Utc::now();
@@ -132,8 +135,10 @@ impl Cx {
         }
     }
 
-    /// `is_not_current` asserts if the `&mut self`
-    /// has passed its permitted signature timestamp.
+    /// `&mut self.is_not_current` asserts that `&mut self` has execeeded its expiry.
+    /// 
+    /// `&mut self.is_not_current` is considered not current on the condition
+    /// `&mut self.is_current` is equal to `false`. 
     #[allow(dead_code)]
     pub fn is_not_current(&mut self) -> bool {
         return self.is_current() == false
