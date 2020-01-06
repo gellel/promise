@@ -139,29 +139,47 @@ impl Cx {
         return self.is_current() == false
     }
 
-    /// `can_sign_from` asserts if the `&mut self` 
-    /// can be cryptographically signed as the `&mut self.sign_from`.
+    /// `&mut self.can_sign_from` asserts that `&mut self` can be cryptographically signed
+    /// as `&mut self.sign_from`. 
+    /// 
+    /// `&mut self.can_sign_from` can perform a signature on the condition that
+    /// `&mut self.is_current` is equal to `true` and `&mut self.sign_at_from` is `None`. 
+    /// 
+    /// `&mut self.sign_at_from` is required to be `None` as `&mut self` is only
+    /// permitted to be signed once as `&mut self.sign_from`.  
     #[allow(dead_code)]
     pub fn can_sign_from(&mut self) -> bool {
         return self.is_current() && self.sign_at_from.is_none();
     }
 
-    /// `can_sign_to` asserts if the `&mut self` 
-    /// can be cryptographically signed as the `&mut self.sign_from`.
+    /// `&mut self.can_sign_to` asserts that `&mut self` can be cryptographically signed
+    /// as `&mut self.sign_to`. 
+    /// 
+    /// `&mut self.can_sign_to` can perform a signature on the condition that
+    /// `&mut self.is_current` is equal to `true` and `&mut self.sign_at_to` is `None`. 
+    /// 
+    /// `&mut self.sign_at_to` is required to be `None` as `&mut self` is only
+    /// permitted to be signed once as `&mut self.sign_to`.  
     #[allow(dead_code)]
     pub fn can_sign_to(&mut self) -> bool {
         return self.is_current() && self.sign_at_to.is_none();
     }
 
-    /// `can_not_sign_from` asserts if the `&mut self` 
-    /// cannot be cryptographically signed as the `&mut self.sign_from`.
+    /// `&mut self.can_not_sign_from` asserts that `&mut self` cannot be cryptographically signed
+    /// as `&mut self.sign_from`.
+    /// 
+    /// `&mut self.can_not_sign_from` cannot perform a signature on the condition
+    /// `&mut self.can_sign_from` is equal to `false`. 
     #[allow(dead_code)]
     pub fn can_not_sign_from(&mut self) -> bool {
         return self.can_sign_from() == false;
     }
 
-    /// `can_not_sign_to` asserts if the `&mut self` 
-    /// cannot be cryptographically signed as the `&mut self.sign_to`.
+    /// `&mut self.can_not_sign_to` asserts that `&mut self` cannot be cryptographically signed
+    /// as `&mut self.sign_to`.
+    /// 
+    /// `&mut self.can_not_sign_to` cannot perform a signature on the condition
+    /// `&mut self.can_sign_to` is equal to `false`. 
     #[allow(dead_code)]
     pub fn can_not_sign_to(&mut self) -> bool {
         return self.can_sign_to() == false;
