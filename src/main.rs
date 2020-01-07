@@ -1,11 +1,11 @@
-mod cx;
+mod contract;
 
-use cx::{Cx};
+use contract::{Contract};
 use uuid::{Uuid};
 
 fn main() {
     
-    let mut cx = Cx::new(Uuid::new_v4(), Uuid::new_v4(), Uuid::new_v4());
+    let mut cx = Contract::new(Uuid::new_v4(), Uuid::new_v4(), Uuid::new_v4());
 
     println!("{}", cx.sign_as_from(String::from("")));
 

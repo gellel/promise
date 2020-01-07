@@ -4,7 +4,7 @@ use std::cmp::{Ord, Ordering};
 use uuid::{Uuid};
 
 #[derive(Debug, Deserialize, Eq, Hash, Serialize)]
-pub struct Cx {
+pub struct Contract {
     create_at: DateTime<Utc>,
     expire_at: Option<DateTime<Utc>>,
     id: Uuid,
@@ -23,22 +23,22 @@ pub struct Cx {
     sign_to_key: String,
 }
 
-impl Cx {
+impl Contract {
 
-    /// `new` creates a new `Cx`.
+    /// `new` creates a new `Contract`.
     /// 
-    /// `new` requires three unique `Uuid` to compose a new `Cx`. 
+    /// `new` requires three unique `Uuid` to compose a new `Contract`. 
     /// 
     /// `new` does not take ownership of `ref_id`, `sign_from` or `sign_to`.
     /// 
-    /// `ref_id` is the `Uuid` of the `struct` the `Cx` is owned by.  
+    /// `ref_id` is the `Uuid` of the `struct` the `Contract` is owned by.  
     /// 
     /// `sign_from` is the `Uuid` of the user that is signing from. 
     /// 
     /// `sign_to` is the `Uuid` of the user that is signing to. 
     #[allow(dead_code)]
-    pub fn new(ref_id: Uuid, sign_from: Uuid, sign_to: Uuid) -> Cx {
-        Cx{
+    pub fn new(ref_id: Uuid, sign_from: Uuid, sign_to: Uuid) -> Contract {
+        Contract{
             create_at: Utc::now(),
             expire_at: None,
             id: Uuid::new_v4(),
@@ -59,7 +59,10 @@ impl Cx {
     }
 }
 
-impl Cx {
+impl Contract {
+
+    #[allow(dead_code)]
+    fn set_set_at(&mut self, utc_set_at: DateTime<Utc>) {}
 
     /// `&mut self.set_sign_at` sets `&mut self.sign_at` to the
     /// argument `utc_sign_at`.
@@ -69,7 +72,7 @@ impl Cx {
     /// and `&mut self.sign_at`. 
     /// 
     /// `&mut self.set_sign_at` can only mutate `&mut self.is_sign` and `&mut self.sign_at`
-    /// if both `&mut self.is_sign_from` && `mut self.is_sign_to` are
+    /// if both `&mut self.is_sign_from` and `mut self.is_sign_to` are
     /// both `true`.
     /// 
     /// `&mut self.set_sign_at` does not take ownership of `utc_sign_at`.
@@ -123,7 +126,7 @@ impl Cx {
     }
 }
 
-impl Cx {
+impl Contract {
 
     /// `&mut self.is_current` asserts that `&mut self` has not exceed its expiry. 
     /// 
@@ -255,19 +258,19 @@ impl Cx {
     }
 }
 
-impl Ord for Cx {
+impl Ord for Contract {
     fn cmp(&self, other: &Self) -> Ordering {
         return self.create_at.cmp(&other.create_at);
     }
 }
 
-impl PartialEq for Cx {
+impl PartialEq for Contract {
     fn eq(&self, other: &Self) -> bool {
         return self.create_at == other.create_at;
     }
 }
 
-impl PartialOrd for Cx {
+impl PartialOrd for Contract {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         return Some(self.cmp(other));
     }
